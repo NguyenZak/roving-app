@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "Home",
+    "tours": "Tours",
+    "about": "About Us",
+    "contact": "Contact",
+    "live": "Live Fully in Vietnam",
+    "mustSee": "Must See in Vietnam"
+  },
+  "hero": {
+    "title": "Discover Vietnam – Live Fully in Every Journey",
+    "subtitle": "Curated experiences from North to South.",
+    "cta": "Explore Now"
+  },
+  "about": {
+    "title": "About Our Travel Company",
+    "desc": "Fresh Travel crafts authentic journeys across Vietnam with passionate guides and real local immersion."
+  },
+  "live": {
+    "title": "Live Fully in Vietnam",
+    "north": "North",
+    "central": "Central",
+    "south": "South",
+    "packages": "Packages"
+  },
+  "mustSee": {
+    "title": "Must See in Vietnam"
+  },
+  "share": {
+    "title": "Share Your Story",
+    "cta": "Share your story on Instagram"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "fullName": "Full Name",
+    "quantity": "Quantity",
+    "date": "Date",
+    "whatsapp": "Whatsapp",
+    "email": "Email",
+    "infoOwner": "Informations Owner",
+    "submit": "Submit"
+  }
+}
+
+

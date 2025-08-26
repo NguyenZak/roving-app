@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "tours": "Tours",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "live": "Sống Trọn Vẹn Ở Việt Nam",
+    "mustSee": "Điểm Đến Không Thể Bỏ Lỡ"
+  },
+  "hero": {
+    "title": "Khám phá Việt Nam – Sống trọn trong từng hành trình",
+    "subtitle": "Trải nghiệm chọn lọc từ Bắc vào Nam.",
+    "cta": "Khám phá ngay"
+  },
+  "about": {
+    "title": "Về Công Ty Du Lịch Của Chúng Tôi",
+    "desc": "Fresh Travel mang đến những hành trình đậm bản sắc Việt Nam với đội ngũ hướng dẫn viên tận tâm và trải nghiệm chân thực."
+  },
+  "live": {
+    "title": "Sống Trọn Vẹn Ở Việt Nam",
+    "north": "Bắc",
+    "central": "Trung",
+    "south": "Nam",
+    "packages": "Gói"
+  },
+  "mustSee": {
+    "title": "Điểm Đến Không Thể Bỏ Lỡ"
+  },
+  "share": {
+    "title": "Chia Sẻ Câu Chuyện Của Bạn",
+    "cta": "Chia sẻ trên Instagram"
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "fullName": "Họ và tên",
+    "quantity": "Số lượng",
+    "date": "Ngày",
+    "whatsapp": "Whatsapp",
+    "email": "Email",
+    "infoOwner": "Thông tin chủ tour",
+    "submit": "Gửi yêu cầu"
+  }
+}
+
+

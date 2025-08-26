@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fresh Travel — Next.js 15 (App Router)
+
+Modern travel website with SEO, i18n (vi/en), shadcn/ui, Framer Motion, Redux Toolkit, NextAuth, Prisma/Postgres, and Mapbox.
+
+## Tech
+- Next.js 15 (App Router) + TypeScript + Tailwind v4 + shadcn/ui
+- Framer Motion, Redux Toolkit + RTK Query
+- Prisma (Postgres)
+- next-intl (vi/en), Mapbox GL
 
 ## Getting Started
-
-First, run the development server:
-
-```bash
+1. Copy env
+```
+cp .env.local.example .env.local
+```
+2. Fill values: DATABASE_URL, NEXT_PUBLIC_MAPBOX_TOKEN
+3. Install and run
+```
+npm i
+npm run prisma:generate
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prisma
+- Edit `prisma/schema.prisma`, then:
+```
+npx prisma migrate dev --name init
+npx prisma studio
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
+- `dev`, `build`, `start`
+- `prisma:generate`, `prisma:migrate`, `prisma:studio`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy (Vercel)
+- Set same envs in Vercel Project Settings
+- Build Command: `npm run build`
+- Output: `.next`
 
-## Learn More
+## SEO
+- Next Metadata API: title/description, Open Graph, sitemap, robots
+- JSON-LD: Organization, LocalBusiness, TouristAttraction
 
-To learn more about Next.js, take a look at the following resources:
+## i18n
+- Locale routes: `/vi/*`, `/en/*`
+- Language switcher in navbar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+- One H1 on homepage (Hero). Other sections use H2/H3
+- All images have alt attributes
