@@ -10,7 +10,8 @@ export async function GET() {
     });
     return NextResponse.json({ items });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    // Return empty list on error to avoid noisy logs in development/staging
+    return NextResponse.json({ items: [], error: String(err) });
   }
 }
 

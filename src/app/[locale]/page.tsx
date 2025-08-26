@@ -3,6 +3,8 @@ import Hero from "@/components/site/Hero";
 import { AboutSection, InstagramSection } from "@/components/site/HomeSections";
 import MustSee from "@/components/site/MustSee";
 import LiveFully from "@/components/site/LiveFully";
+import Transportation from "@/components/site/Transportation";
+import TravelTips from "@/components/site/TravelTips";
 import ContactForm from "@/components/site/ContactForm";
 import Footer from "@/components/site/Footer";
 
@@ -16,8 +18,10 @@ export default function HomePage() {
       <main>
         <Hero />
         <AboutSection />
+        <Transportation />
         <LiveFully />
         <MustSee />
+        <TravelTips />
         <InstagramSection />
         <section id="contact" className="py-16 scroll-mt-16">
           <div className="mx-auto max-w-6xl px-4">

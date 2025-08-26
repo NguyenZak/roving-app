@@ -18,8 +18,8 @@ export default function LanguageSwitch() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="vi">Tiếng Việt</SelectItem>
-        <SelectItem value="en">English</SelectItem>
+        <SelectItem value="vi">Vi</SelectItem>
+        <SelectItem value="en">En</SelectItem>
       </SelectContent>
     </Select>
   );

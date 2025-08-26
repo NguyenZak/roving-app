@@ -1,6 +1,6 @@
 const intlConfig = {
   locales: ["vi", "en"],
-  defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "vi",
+  defaultLocale: "en",
   localePrefix: "always",
 };
 

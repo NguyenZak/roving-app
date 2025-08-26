@@ -18,16 +18,27 @@
   },
   "live": {
     "title": "Sống Trọn Vẹn Ở Việt Nam",
+    "desc": "Chọn theo vùng miền hoặc khám phá các gói tour.",
     "north": "Bắc",
     "central": "Trung",
     "south": "Nam",
     "packages": "Gói"
   },
   "mustSee": {
-    "title": "Điểm Đến Không Thể Bỏ Lỡ"
+    "title": "Điểm Đến Không Thể Bỏ Lỡ",
+    "desc": "Những điểm đến và tỉnh thành đáng khám phá."
+  },
+  "transportation": {
+    "title": "Phương Tiện Di Chuyển",
+    "desc": "Các cách di chuyển ở Việt Nam: máy bay, tàu hỏa, xe khách, tàu thuyền."
+  },
+  "tips": {
+    "title": "Mẹo Du Lịch",
+    "desc": "Lời khuyên hữu ích để chuyến đi thuận lợi và an toàn."
   },
   "share": {
     "title": "Chia Sẻ Câu Chuyện Của Bạn",
+    "desc": "Theo dõi và lấy cảm hứng từ hành trình thực tế.",
     "cta": "Chia sẻ trên Instagram"
   },
   "contact": {

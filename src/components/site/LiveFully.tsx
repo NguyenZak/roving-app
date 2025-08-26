@@ -33,7 +33,8 @@ export default function LiveFully() {
   return (
     <section id="live" className="py-16 bg-muted/40 scroll-mt-16">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">{t("title")}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center">{t("title")}</h2>
+        <p className="text-muted-foreground text-center mb-8">{t("desc")}</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {items.map((it) => (
             <motion.div key={it.key} whileHover={{ scale: 1.02 }}>

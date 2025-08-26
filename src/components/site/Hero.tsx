@@ -105,11 +105,6 @@ export default function Hero() {
       playlist: videoId,
       enablejsapi: "1",
     });
-    if (typeof window !== "undefined") {
-      try {
-        params.set("origin", window.location.origin);
-      } catch {}
-    }
     if (s.start !== undefined) params.set("start", String(s.start));
     if (s.end !== undefined) params.set("end", String(s.end));
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
@@ -147,7 +142,7 @@ export default function Hero() {
   }, [activeIndex]);
 
   return (
-    <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <Navbar transparent />
       <div className="absolute inset-0 -z-10">
         {isMounted ? (

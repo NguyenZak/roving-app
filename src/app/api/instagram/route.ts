@@ -10,7 +10,7 @@ export async function GET() {
       const res = await fetch(url, { next: { revalidate: 300 } });
       if (!res.ok) {
         const text = await res.text();
-        return NextResponse.json({ error: "Instagram fetch failed", details: text }, { status: 502 });
+        return NextResponse.json({ items: [], error: "Instagram fetch failed", details: text });
       }
       const data = await res.json();
       const items = Array.isArray(data?.data) ? data.data.slice(0, 8) : [];
@@ -29,7 +29,7 @@ export async function GET() {
     });
     if (!res.ok) {
       const text = await res.text();
-      return NextResponse.json({ error: "Instagram fallback fetch failed", details: text }, { status: 502 });
+      return NextResponse.json({ items: [], error: "Instagram fallback fetch failed", details: text });
     }
     const data = await res.json();
     type InstagramEdge = {
@@ -58,7 +58,7 @@ export async function GET() {
     });
     return NextResponse.json({ items });
   } catch (err) {
-    return NextResponse.json({ error: "Unexpected error", details: String(err) }, { status: 500 });
+    return NextResponse.json({ items: [], error: "Unexpected error", details: String(err) });
   }
 }
 

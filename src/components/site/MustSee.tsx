@@ -53,7 +53,8 @@ export default function MustSee() {
   return (
     <section id="must-see" className="py-16 scroll-mt-16">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">{t("title")}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center">{t("title")}</h2>
+        <p className="text-muted-foreground text-center mb-12">{t("desc")}</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {combined.map(({ regionKey, province }) => {
             const provinceSlug = slugify(province.nameEn);

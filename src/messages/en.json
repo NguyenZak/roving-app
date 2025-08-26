@@ -18,16 +18,27 @@
   },
   "live": {
     "title": "Live Fully in Vietnam",
+    "desc": "Choose by region or explore curated packages.",
     "north": "North",
     "central": "Central",
     "south": "South",
     "packages": "Packages"
   },
   "mustSee": {
-    "title": "Must See in Vietnam"
+    "title": "Must See in Vietnam",
+    "desc": "Top destinations and provinces to explore."
+  },
+  "transportation": {
+    "title": "Transportation",
+    "desc": "Ways to get around Vietnam—from flights to trains, buses and boats."
+  },
+  "tips": {
+    "title": "Travel Tips",
+    "desc": "Practical advice to make your trip smooth and safe."
   },
   "share": {
     "title": "Share Your Story",
+    "desc": "Follow us and get inspired by real journeys.",
     "cta": "Share your story on Instagram"
   },
   "contact": {

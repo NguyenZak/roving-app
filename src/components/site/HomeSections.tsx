@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function AboutSection() {
   const t = useTranslations("about");
@@ -65,7 +64,7 @@ export function InstagramSection() {
   return (
     <section className="py-16 bg-muted/40">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="flex items-center justify-between gap-4 mb-8">
+        <div className="flex items-center justify-between gap-4 mb-2">
           <h2 className="text-2xl md:text-3xl font-bold">{t("title")}</h2>
           <Button asChild size="lg">
             <Link
@@ -77,6 +76,7 @@ export function InstagramSection() {
             </Link>
           </Button>
         </div>
+        <p className="text-muted-foreground mb-8">{t("desc")}</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {
             (

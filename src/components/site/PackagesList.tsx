@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
+// Province search is handled at the page level; this component only filters packages.
 
 type Duration = { days: number; nights: number };
 
@@ -58,6 +59,8 @@ export default function PackagesList({
         items: g.items.filter((i) => matchDuration(i.duration) && (q === "" || i.title.toLowerCase().includes(q))),
       }));
   }, [normalizedGroups, region, duration, query]);
+
+  // Province matches are not shown here; handled by the page using the navbar query.
 
   function renderHighlighted(text: string) {
     const q = query.trim();
@@ -117,6 +120,8 @@ export default function PackagesList({
           </select>
         </div>
       </div>
+
+      {/* Province cards removed from here */}
 
       {filteredGroups.map((g) => (
         <section key={g.key}>
