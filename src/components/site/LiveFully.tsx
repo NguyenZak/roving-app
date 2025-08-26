@@ -46,6 +46,12 @@ export default function LiveFully() {
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-black/25" />
+                  <div className="absolute inset-0 flex items-center justify-center p-3 text-center">
+                    <span className="text-white drop-shadow-md text-4xl md:text-5xl font-fs-playlist">
+                      {t(it.key)}
+                    </span>
+                  </div>
                 </Card>
               </Link>
             </motion.div>

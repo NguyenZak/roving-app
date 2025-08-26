@@ -4,7 +4,7 @@ export default function SEOJsonLd() {
   const org = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Fresh Travel",
+    name: "Roving Vietnam Travel",
     url: "https://www.fresh-travel.example",
     logo: "https://www.fresh-travel.example/og.jpg",
   };

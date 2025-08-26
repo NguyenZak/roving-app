@@ -90,3 +90,17 @@ model Booking {
   tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
 }
 
+model Destination {
+  id          String   @id @default(cuid())
+  region      String   // north | central | south
+  nameVi      String
+  nameEn      String
+  image       String
+  alt         String
+  slug        String   @unique
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

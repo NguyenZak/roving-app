@@ -1,4 +1,4 @@
-# Fresh Travel — Next.js 15 (App Router)
+# Roving Vietnam Travel — Next.js 15 (App Router)
 
 Modern travel website with SEO, i18n (vi/en), shadcn/ui, Framer Motion, Redux Toolkit, NextAuth, Prisma/Postgres, and Mapbox.
 

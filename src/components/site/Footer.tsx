@@ -8,7 +8,7 @@ export default function Footer() {
       <SEOJsonLd />
       <div className="mx-auto max-w-6xl px-4 py-10 grid md:grid-cols-4 gap-8">
         <div>
-          <div className="text-primary font-semibold text-lg">Fresh Travel</div>
+          <div className="text-primary font-semibold text-lg">Roving Vietnam Travel</div>
           <p className="mt-2 text-sm text-muted-foreground">Live fully in Vietnam.</p>
         </div>
         <div>
@@ -36,11 +36,11 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="text-center text-xs text-muted-foreground py-4 border-t">© {year} Fresh Travel</div>
+      <div className="text-center text-xs text-muted-foreground py-4 border-t">© {year} Roving Vietnam Travel</div>
       <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
-        name: "Fresh Travel",
+        name: "Roving Vietnam Travel",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Ho Chi Minh City",

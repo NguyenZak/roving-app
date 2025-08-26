@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/site/Hero";
-import { AboutSection, MustSeeSection, InstagramSection } from "@/components/site/HomeSections";
+import { AboutSection, InstagramSection } from "@/components/site/HomeSections";
+import MustSee from "@/components/site/MustSee";
 import LiveFully from "@/components/site/LiveFully";
 import ContactForm from "@/components/site/ContactForm";
 import Footer from "@/components/site/Footer";
@@ -16,7 +17,7 @@ export default function HomePage() {
         <Hero />
         <AboutSection />
         <LiveFully />
-        <MustSeeSection />
+        <MustSee />
         <InstagramSection />
         <section id="contact" className="py-16 scroll-mt-16">
           <div className="mx-auto max-w-6xl px-4">

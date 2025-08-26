@@ -20,7 +20,7 @@ export default async function ContactPage() {
       <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "ContactPage",
-        name: "Contact Fresh Travel"
+        name: "Contact Roving Vietnam Travel"
       })}} />
     </>
   );

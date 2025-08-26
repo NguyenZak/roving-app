@@ -44,7 +44,7 @@
 }
 
 :root {
-  /* Fresh Travel Theme */
+  /* Roving Vietnam Travel Theme */
   --radius: 0.625rem;
   --background: #FFFFFF; /* Neutral */
   --foreground: #333333; /* Neutral Dark */
@@ -121,5 +121,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .font-fs-playlist {
+    font-family: var(--font-fs-playlist);
   }
 }

@@ -15,7 +15,7 @@ export default async function AboutPage() {
             <p className="mt-4 text-muted-foreground leading-relaxed">{t("desc")}</p>
           </div>
           <div className="relative h-72">
-            <Image src="/window.svg" alt="About Fresh Travel" fill className="object-cover rounded-lg border" />
+            <Image src="/window.svg" alt="About Roving Vietnam Travel" fill className="object-cover rounded-lg border" />
           </div>
         </div>
       </main>
@@ -23,7 +23,7 @@ export default async function AboutPage() {
       <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Organization",
-        name: "Fresh Travel",
+        name: "Roving Vietnam Travel",
         url: "https://www.fresh-travel.example"
       })}} />
     </>
