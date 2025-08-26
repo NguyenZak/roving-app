@@ -120,7 +120,7 @@ export default function PackagesList({
 
       {filteredGroups.map((g) => (
         <section key={g.key}>
-          <h2 className="text-xl md:text-2xl font-semibold mb-4">{g.label}</h2>
+          <h2 className="text-xl md:text-2xl font-semibold mb-4 text-center">{g.label}</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {g.items.map((pkg) => (
               <div key={`${g.key}-${pkg.slug}`} className="group border rounded-lg overflow-hidden">

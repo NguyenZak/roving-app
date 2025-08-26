@@ -40,7 +40,10 @@ export default function RegionPage({ params }: Params) {
                 <Link key={display} href={`/regions/${params.region}/${slug}`} className="block group">
                   <div className="relative h-40 md:h-48 overflow-hidden rounded-lg border">
                     <Image src={p.image} alt={p.alt} fill className="object-cover transition-transform duration-300 group-hover:scale-105" sizes="(max-width:768px) 50vw, 25vw" />
-                    <div className="absolute inset-x-0 bottom-0 bg-black/40 text-white px-3 py-2 text-sm md:text-base">{display}</div>
+                    <div className="absolute inset-0 bg-black/25" />
+                    <div className="absolute inset-0 flex items-center justify-center p-3 text-center">
+                      <span className="text-white drop-shadow-md font-fs-playlist text-3xl md:text-4xl">{display}</span>
+                    </div>
                   </div>
                 </Link>
               );

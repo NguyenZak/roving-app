@@ -18,7 +18,7 @@ export default function ProvincePage({ params }: Params) {
       <Navbar />
       <main className="py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <h1 className="text-2xl md:text-3xl font-bold mb-6">{pretty}</h1>
+          <h1 className="text-4xl md:text-5xl font-fs-playlist mb-6">{pretty}</h1>
           <p className="text-muted-foreground mb-8">Nội dung chi tiết cho {pretty} sẽ hiển thị tại đây.</p>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="relative h-64 rounded-lg overflow-hidden border">

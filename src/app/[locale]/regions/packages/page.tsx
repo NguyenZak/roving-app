@@ -17,7 +17,7 @@ export default function PackagesPage({ params }: Params) {
       <Navbar />
       <main className="py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <h1 className="text-2xl md:text-3xl font-bold mb-8">{params.locale === 'vi' ? 'Gói theo khu vực' : 'Packages by Region'}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center">{params.locale === 'vi' ? 'Gói theo khu vực' : 'Packages by Region'}</h1>
           <PackagesList
             locale={params.locale}
             groups={groups.map((g) => ({

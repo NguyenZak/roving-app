@@ -105,6 +105,11 @@ export default function Hero() {
       playlist: videoId,
       enablejsapi: "1",
     });
+    if (typeof window !== "undefined") {
+      try {
+        params.set("origin", window.location.origin);
+      } catch {}
+    }
     if (s.start !== undefined) params.set("start", String(s.start));
     if (s.end !== undefined) params.set("end", String(s.end));
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
@@ -192,6 +197,7 @@ export default function Hero() {
                       autoPlay
                       muted
                       loop
+                      preload="auto"
                     />
                   ) : s.type === "youtube" ? (
                     getYouTubeEmbedSrc(s) ? (
@@ -201,7 +207,7 @@ export default function Hero() {
                         title={s.id || s.url || "YouTube video"}
                         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                         allowFullScreen
-                        loading="lazy"
+                        loading="eager"
                         referrerPolicy="no-referrer-when-downgrade"
                         ref={(el) => {
                           youtubeIframesRef.current[i] = el;
@@ -240,7 +246,7 @@ export default function Hero() {
                   title={slides[0].id || slides[0].url || "YouTube video"}
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   allowFullScreen
-                  loading="lazy"
+                  loading="eager"
                   referrerPolicy="no-referrer-when-downgrade"
                   ref={(el) => {
                     youtubeIframesRef.current[0] = el;
