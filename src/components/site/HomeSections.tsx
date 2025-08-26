@@ -132,12 +132,14 @@ export function InstagramSection() {
                   aria-label={alt}
                 >
                   {imageSrc ? (
-                    <img
+                    <Image
                       src={imageSrc}
                       alt={alt}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      fill
+                      unoptimized
+                      className="object-cover"
                       loading="lazy"
-                      decoding="async"
+                      sizes="(max-width: 768px) 50vw, 25vw"
                     />
                   ) : (
                     <div className="w-full h-full bg-muted" />
