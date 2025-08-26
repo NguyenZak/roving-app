@@ -32,8 +32,18 @@ export async function GET() {
       return NextResponse.json({ error: "Instagram fallback fetch failed", details: text }, { status: 502 });
     }
     const data = await res.json();
-    const edges = data?.data?.user?.edge_owner_to_timeline_media?.edges || [];
-    const items = edges.slice(0, 8).map((e: any) => {
+    type InstagramEdge = {
+      node?: {
+        id?: string;
+        is_video?: boolean;
+        display_url?: string;
+        shortcode?: string;
+        thumbnail_src?: string;
+        edge_media_to_caption?: { edges?: Array<{ node?: { text?: string } }> };
+      };
+    };
+    const edges: InstagramEdge[] = data?.data?.user?.edge_owner_to_timeline_media?.edges || [];
+    const items = edges.slice(0, 8).map((e: InstagramEdge) => {
       const node = e?.node || {};
       const caption = node?.edge_media_to_caption?.edges?.[0]?.node?.text;
       const isVideo = Boolean(node?.is_video);
