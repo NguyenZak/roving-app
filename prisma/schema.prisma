@@ -1,18 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-generator client {
-  provider = "prisma-client-js"
-}
 
-// NextAuth core models
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -20,10 +14,14 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-
+  role          String    @default("user")
+  status        String    @default("active")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  sessions      Session[]
   bookings      Booking[]
+  sessions      Session[]
+  reviews       TourReview[]
 }
 
 model Account {
@@ -32,15 +30,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -50,8 +47,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -62,45 +58,260 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// App models
 model Tour {
-  id             String      @id @default(cuid())
-  slug           String      @unique
+  id             String     @id @default(cuid())
+  slug           String     @unique
   title          String
   description    String
   price          Int
   location       String
+  destinationId  String?
   image          String
+  featured       Boolean    @default(false)
+  status         String     @default("active") // active, inactive, draft
+  duration       String?    // e.g., "3 days", "Half day"
+  maxGroupSize   Int?       // Maximum number of people
+  difficulty     String?    // easy, medium, hard
+  category       String?    // cultural, adventure, nature, etc.
   availableDates DateTime[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  
+  // NEW FIELDS - Basic Info
+  tourCode       String?    // Mã tour duy nhất
+  shortDescription String?  // Mô tả ngắn gọn
+  departurePoint String?    // Điểm khởi hành
+  returnPoint    String?    // Điểm kết thúc
+  minGroupSize   Int?       // Số người tối thiểu
+  ageRestriction String?    // Giới hạn tuổi
+  
+  // NEW FIELDS - Detailed Info
+  itinerary      String?    // Lịch trình chi tiết (JSON hoặc Text)
+  highlights     String[]   // Điểm nổi bật
+  inclusions     String[]   // Dịch vụ bao gồm
+  exclusions     String[]   // Dịch vụ không bao gồm
+  transportation String?    // Phương tiện di chuyển
+  accommodation  String?    // Thông tin khách sạn
+  guide          String?    // Thông tin hướng dẫn viên
+  
+  // NEW FIELDS - Additional Info
+  whatToBring    String[]   // Cần mang theo gì
+  physicalReq    String?    // Yêu cầu thể lực
+  cancellationPolicy String? // Chính sách hủy
+  weatherPolicy  String?    // Chính sách thời tiết
+  
+  // NEW FIELDS - SEO & Marketing
+  metaDescription String?   // Mô tả SEO
+  keywords       String[]   // Từ khóa
+  tags           String[]   // Thẻ tag
+  gallery        String[]   // Gallery images
+  
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  bookings       Booking[]
+  Destination    Destination? @relation(fields: [destinationId], references: [id])
+  galleries      TourGallery[]
+  reviews        TourReview[]
 
-  bookings Booking[]
+  @@index([destinationId])
+  @@index([featured])
+  @@index([status])
+  @@index([category])
+  @@index([difficulty])
 }
 
 model Booking {
-  id        String   @id @default(cuid())
-  userId    String
-  tourId    String
-  date      DateTime
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  bookingId      String   @unique
+  userId         String?
+  tourId         String?
+  customerName   String
+  customerEmail  String
+  tourName       String
+  tourDate       DateTime
+  numberOfPeople Int
+  totalAmount    Float
+  status         String   @default("pending")
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  tour           Tour?    @relation(fields: [tourId], references: [id])
+  user           User?    @relation(fields: [userId], references: [id])
 }
 
 model Destination {
+  id         String   @id @default(cuid())
+  region     String
+  regionId   String?
+  nameVi     String
+  nameEn     String
+  image      String
+  alt        String
+  slug       String   @unique
+  isFeatured Boolean  @default(false)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Region     Region?  @relation(fields: [regionId], references: [id])
+  tours      Tour[]
+
+  @@index([regionId])
+}
+
+model ProvinceCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model TourPackage {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  shortDesc    String
+  priceFrom    Int
+  durationDays Int
+  image        String
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Tip {
   id          String   @id @default(cuid())
-  region      String   // north | central | south
-  nameVi      String
-  nameEn      String
-  image       String
-  alt         String
   slug        String   @unique
-  isFeatured  Boolean  @default(false)
-  order       Int      @default(0)
+  title       String
+  excerpt     String
+  content     String
+  image       String
+  tags        String[]
+  publishedAt DateTime @default(now())
+  comments    Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
+model Transport {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  title       String
+  image       String
+  alt         String
+  summary     String
+  content     String
+  tags        String[]
+  publishedAt DateTime @default(now())
+  comments    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id                String   @id @default(cuid())
+  fullName          String
+  email             String
+  whatsapp          String?
+  quantity          Int
+  date              DateTime
+  message           String?
+  status            String   @default("new") // new, contacted, fake, booked
+  responsiblePerson String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String
+  phone     String?
+  status    String   @default("active")
+  source    String   @default("contact_form")
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String?
+  image       String
+  alt         String
+  type        String   @default("image") // image, video, youtube
+  videoUrl    String?
+  youtubeUrl  String?
+  poster      String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  location  String?
+  rating    Int      @default(5)
+  comment   String
+  avatar    String?
+  tour      String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Region {
+  id          String        @id @default(cuid())
+  key         String        @unique // north, central, south
+  nameVi      String
+  nameEn      String
+  descriptionVi String?
+  descriptionEn String?
+  image       String?
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Destinations Destination[]
+}
+
+// NEW MODELS
+
+// Bộ sưu tập ảnh tour
+model TourGallery {
+  id        String   @id @default(cuid())
+  tourId    String
+  imageUrl  String
+  alt       String?
+  caption   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  
+  tour      Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  
+  @@index([tourId])
+}
+
+// Đánh giá tour
+model TourReview {
+  id        String   @id @default(cuid())
+  tourId    String
+  userId    String?
+  userName  String
+  userEmail String
+  rating    Int      // 1-5 stars
+  comment   String
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  
+  tour      Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  @@index([tourId])
+  @@index([rating])
+}

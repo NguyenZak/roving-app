@@ -15,11 +15,26 @@ export default function LanguageSwitch() {
       onValueChange={(value: "vi" | "en") => router.replace({ pathname }, { locale: value })}
     >
       <SelectTrigger className="w-[110px]">
-        <SelectValue />
+        <SelectValue>
+          <div className="flex items-center gap-2">
+            <span>{locale === "vi" ? "🇻🇳" : "🇺🇸"}</span>
+            <span className="uppercase">{locale}</span>
+          </div>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="vi">Vi</SelectItem>
-        <SelectItem value="en">En</SelectItem>
+        <SelectItem value="vi">
+          <div className="flex items-center gap-2">
+            <span>🇻🇳</span>
+            <span>Vi</span>
+          </div>
+        </SelectItem>
+        <SelectItem value="en">
+          <div className="flex items-center gap-2">
+            <span>🇺🇸</span>
+            <span>En</span>
+          </div>
+        </SelectItem>
       </SelectContent>
     </Select>
   );

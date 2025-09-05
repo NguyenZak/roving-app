@@ -1,0 +1,65 @@
+{
+  "name": "Roving Travel",
+  "description": "A modern travel website built with Next.js",
+  "repository": "https://github.com/your-username/roving-travel",
+  "logo": "https://via.placeholder.com/150x150/4F46E5/FFFFFF?text=RT",
+  "keywords": ["nextjs", "travel", "tourism", "prisma", "postgresql"],
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "NEXTAUTH_SECRET": {
+      "description": "NextAuth secret key",
+      "generator": "secret"
+    },
+    "NEXTAUTH_URL": {
+      "description": "NextAuth URL",
+      "value": "https://your-app-name.herokuapp.com"
+    },
+    "NEXT_PUBLIC_DEFAULT_LOCALE": {
+      "description": "Default locale",
+      "value": "vi"
+    },
+    "EMAIL_USER": {
+      "description": "Email username for sending emails",
+      "value": "rovingvietnamtravel@gmail.com"
+    },
+    "EMAIL_PASS": {
+      "description": "Email password/app password",
+      "value": "your-email-password"
+    },
+    "ADMIN_EMAIL": {
+      "description": "Admin email address",
+      "value": "rovingvietnamtravel@gmail.com"
+    },
+    "NEXT_PUBLIC_MAPBOX_TOKEN": {
+      "description": "Mapbox API token",
+      "value": "your-mapbox-token"
+    },
+    "INSTAGRAM_ACCESS_TOKEN": {
+      "description": "Instagram access token",
+      "value": "your-instagram-token"
+    }
+  },
+  "scripts": {
+    "postdeploy": "npx prisma migrate deploy && npx prisma generate"
+  }
+}

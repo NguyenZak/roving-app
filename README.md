@@ -11,13 +11,14 @@ Modern travel website with SEO, i18n (vi/en), shadcn/ui, Framer Motion, Redux To
 ## Getting Started
 1. Copy env
 ```
-cp .env.local.example .env.local
+cp docs/ENV.sample .env
 ```
-2. Fill values: DATABASE_URL, NEXT_PUBLIC_MAPBOX_TOKEN
-3. Install and run
+2. Fill values: DATABASE_URL, NEXT_PUBLIC_MAPBOX_TOKEN, NEXTAUTH_SECRET
+3. Install and run (local dev)
 ```
 npm i
 npm run prisma:generate
+npx prisma migrate deploy
 npm run dev
 ```
 
@@ -27,6 +28,9 @@ npm run dev
 npx prisma migrate dev --name init
 npx prisma studio
 ```
+### Seed admin user
+Create a `.env` admin credentials and run seed script below.
+
 
 ## Scripts
 - `dev`, `build`, `start`

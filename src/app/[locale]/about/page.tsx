@@ -9,10 +9,10 @@ export default async function AboutPage() {
     <>
       <Navbar />
       <main className="py-12">
-        <div className="mx-auto max-w-5xl px-4 grid md:grid-cols-2 gap-8 items-center">
+        <div className="mx-auto max-w-[1440px] px-6 grid md:grid-cols-2 gap-8 items-center">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{t("desc")}</p>
+            <div className="mt-4 text-muted-foreground leading-relaxed whitespace-pre-line">{t("desc")}</div>
           </div>
           <div className="relative h-72">
             <Image src="/window.svg" alt="About Roving Vietnam Travel" fill className="object-cover rounded-lg border" />

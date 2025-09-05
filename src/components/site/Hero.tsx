@@ -16,8 +16,8 @@ import "swiper/css/effect-fade";
 import Navbar from "@/components/site/Navbar";
 
 type Slide =
-  | { type: "image"; src: string; alt: string }
-  | { type: "video"; src: string; poster?: string; alt?: string }
+  | { type: "image"; src: string; alt: string; title?: string; subtitle?: string }
+  | { type: "video"; src: string; poster?: string; alt?: string; title?: string; subtitle?: string }
   | {
       type: "youtube";
       id?: string; // e.g., "dQw4w9WgXcQ"
@@ -25,28 +25,32 @@ type Slide =
       start?: number;
       end?: number;
       poster?: string;
+      title?: string;
+      subtitle?: string;
     };
 
-const slides: Slide[] = [
-  {
-    type: "youtube",
-    url: "https://www.youtube.com/watch?v=Au6LqK1UH8g",
-    poster: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=2000&auto=format&fit=crop",
-  },
+// Fallback slides nếu không có banner từ database
+const fallbackSlides: Slide[] = [
   {
     type: "image",
     src: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2000&auto=format&fit=crop",
     alt: "Ha Long Bay limestone karsts at sunset",
+    title: "Discover Vietnam",
+    subtitle: "Live fully in every journey"
   },
   {
     type: "image",
     src: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=2000&auto=format&fit=crop",
     alt: "Hoi An lantern street at night",
+    title: "Ancient Beauty",
+    subtitle: "Experience the charm of Hoi An"
   },
   {
     type: "image",
     src: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2000&auto=format&fit=crop",
     alt: "Sand beach and turquoise water in Vietnam",
+    title: "Coastal Paradise",
+    subtitle: "Beautiful beaches await you"
   },
 ];
 
@@ -56,11 +60,62 @@ export default function Hero() {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isYoutubeMuted, setIsYoutubeMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
+  const [loading, setLoading] = useState(true);
   const youtubeIframesRef = useRef<Record<number, HTMLIFrameElement | null>>({});
 
   useEffect(() => {
     setIsMounted(true);
+    fetchBanners();
   }, []);
+
+  // Fetch banners from database
+  const fetchBanners = async () => {
+    try {
+      const response = await fetch('/api/banners');
+      if (response.ok) {
+        const banners = await response.json();
+        if (banners && banners.length > 0) {
+          const formattedSlides: Slide[] = banners.map((banner: any) => {
+            if (banner.type === 'image') {
+              return {
+                type: 'image',
+                src: banner.image,
+                alt: banner.alt,
+                title: banner.title,
+                subtitle: banner.subtitle
+              };
+            } else if (banner.type === 'video') {
+              return {
+                type: 'video',
+                src: banner.videoUrl || '',
+                poster: banner.poster || banner.image,
+                alt: banner.alt,
+                title: banner.title,
+                subtitle: banner.subtitle
+              };
+            } else if (banner.type === 'youtube') {
+              return {
+                type: 'youtube',
+                url: banner.youtubeUrl || '',
+                poster: banner.poster || banner.image,
+                title: banner.title,
+                subtitle: banner.subtitle
+              };
+            }
+            return null;
+          }).filter(Boolean);
+          
+          setSlides(formattedSlides);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching banners:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Ensure autoplay behavior matches the active slide type on mount/when swiper is ready
   useEffect(() => {
@@ -73,7 +128,20 @@ export default function Hero() {
     } else {
       swiper.autoplay?.start();
     }
-  }, [swiper]);
+  }, [swiper, slides]);
+
+  // Add pause/play functionality
+  const togglePlayPause = () => {
+    if (swiper) {
+      if (isPlaying) {
+        swiper.autoplay?.stop();
+        setIsPlaying(false);
+      } else {
+        swiper.autoplay?.start();
+        setIsPlaying(true);
+      }
+    }
+  };
 
   function extractYouTubeId(url: string): string | null {
     try {
@@ -90,102 +158,115 @@ export default function Hero() {
     }
   }
 
-  function getYouTubeEmbedSrc(s: Extract<Slide, { type: "youtube" }>): string | null {
-    const videoId = s.id ?? (s.url ? extractYouTubeId(s.url) : null);
-    if (!videoId) return null;
+  function getYouTubeEmbedSrc(slide: Slide): string | null {
+    if (slide.type !== "youtube") return null;
+    const id = slide.id || (slide.url ? extractYouTubeId(slide.url) : null);
+    if (!id) return null;
     const params = new URLSearchParams({
       autoplay: "1",
       mute: "1",
+      loop: "1",
+      playlist: id,
       controls: "0",
-      playsinline: "1",
+      showinfo: "0",
       rel: "0",
       modestbranding: "1",
-      showinfo: "0",
-      loop: "1",
-      playlist: videoId,
-      enablejsapi: "1",
+      iv_load_policy: "3",
+      fs: "0",
+      start: slide.start?.toString() || "0",
+      end: slide.end?.toString() || "",
     });
-    if (s.start !== undefined) params.set("start", String(s.start));
-    if (s.end !== undefined) params.set("end", String(s.end));
-    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+    return `https://www.youtube.com/embed/${id}?${params.toString()}`;
   }
 
-  function toggleYouTubeMute() {
-    const frame = youtubeIframesRef.current[activeIndex];
-    if (!frame || !frame.contentWindow) return;
-    const action = isYoutubeMuted ? "unMute" : "mute";
-    frame.contentWindow.postMessage(
-      JSON.stringify({ event: "command", func: action, args: [] }),
-      "https://www.youtube.com"
+  if (loading) {
+    return (
+      <div className="relative min-h-screen bg-gray-100">
+        <Navbar transparent />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Đang tải banner...</p>
+          </div>
+        </div>
+      </div>
     );
-    setIsYoutubeMuted(!isYoutubeMuted);
   }
 
-  // When switching to a YouTube slide, ensure autoplay (muted) and reflect UI
-  useEffect(() => {
-    const active = slides[activeIndex];
-    if (active?.type === "youtube") {
-      setIsYoutubeMuted(true);
-      const frame = youtubeIframesRef.current[activeIndex];
-      if (frame?.contentWindow) {
-        // Mute first to allow autoplay, then play
-        frame.contentWindow.postMessage(
-          JSON.stringify({ event: "command", func: "mute", args: [] }),
-          "https://www.youtube.com"
-        );
-        frame.contentWindow.postMessage(
-          JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-          "https://www.youtube.com"
-        );
-      }
-    }
-  }, [activeIndex]);
+  if (!isMounted) return null;
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      <Navbar transparent />
-      <div className="absolute inset-0 -z-10">
+    <div className="relative min-h-screen">
+      <Navbar />
+      
+      {/* Hero Content */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
+        <div className="text-center text-white px-6 max-w-4xl mx-auto">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-inter-bold mb-6"
+          >
+            {slides[activeIndex]?.title || t("title")}
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl md:text-2xl lg:text-3xl font-inter-normal mb-8 text-gray-200"
+          >
+            {slides[activeIndex]?.subtitle || t("subtitle")}
+          </motion.p>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Button asChild size="lg" className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700">
+              <Link href="/tours">{t("exploreButton")}</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-gray-900">
+              <Link href="/contact">{t("contactButton")}</Link>
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Background Slider */}
+      <div className="absolute inset-0 z-0">
         {isMounted ? (
           <Swiper
             modules={[Autoplay, Pagination, EffectFade]}
-            autoplay={{ delay: 15000, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
             effect="fade"
-            loop
-            className="h-full w-full"
-            onSwiper={(s) => {
-              setSwiper(s);
-              setActiveIndex(s.realIndex ?? 0);
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
             }}
-            onSlideChange={(instance) => {
-              const s = instance as SwiperType;
-              const index = s.realIndex ?? 0;
-              setActiveIndex(index);
-              const active = slides[index];
+            pagination={{
+              clickable: true,
+              dynamicBullets: true,
+            }}
+            loop={true}
+            onSwiper={setSwiper}
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+              const active = slides[swiper.realIndex];
               if (active?.type === "youtube") {
-                s.autoplay?.stop();
-                const frame = youtubeIframesRef.current[index];
-                if (frame?.contentWindow) {
-                  frame.contentWindow.postMessage(
-                    JSON.stringify({ event: "command", func: "mute", args: [] }),
-                    "https://www.youtube.com"
-                  );
-                  frame.contentWindow.postMessage(
-                    JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-                    "https://www.youtube.com"
-                  );
-                }
+                swiper.autoplay?.stop();
               } else {
-                s.autoplay?.start();
+                swiper.autoplay?.start();
               }
             }}
+            className="h-full"
           >
             {slides.map((s, i) => (
               <SwiperSlide key={i}>
-                <div className="absolute inset-0">
+                <div className="absolute inset-0 overflow-hidden">
                   {s.type === "video" ? (
                     <video
-                      className="h-full w-full object-cover"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full object-cover"
                       src={s.src}
                       poster={s.poster}
                       playsInline
@@ -197,7 +278,7 @@ export default function Hero() {
                   ) : s.type === "youtube" ? (
                     getYouTubeEmbedSrc(s) ? (
                       <iframe
-                        className="h-full w-full object-cover"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full transform-gpu scale-[1.3]"
                         src={getYouTubeEmbedSrc(s) as string}
                         title={s.id || s.url || "YouTube video"}
                         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
@@ -209,7 +290,7 @@ export default function Hero() {
                         }}
                       />
                     ) : (
-                      <div className="h-full w-full bg-black" />
+                      <div className="absolute inset-0 bg-black" />
                     )
                   ) : (
                     <Image src={s.src} alt={s.alt} fill priority className="object-cover" />
@@ -222,108 +303,53 @@ export default function Hero() {
             ))}
           </Swiper>
         ) : (
-          <div className="absolute inset-0">
-            {slides[0]?.type === "video" ? (
-              <video
-                className="h-full w-full object-cover"
-                src={slides[0].src}
-                poster={slides[0].poster}
-                playsInline
-                autoPlay
-                muted
-                loop
-              />
-            ) : slides[0]?.type === "youtube" ? (
-              getYouTubeEmbedSrc(slides[0]) ? (
-                <iframe
-                  className="h-full w-full object-cover"
-                  src={getYouTubeEmbedSrc(slides[0]) as string}
-                  title={slides[0].id || slides[0].url || "YouTube video"}
-                  allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                  allowFullScreen
-                  loading="eager"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  ref={(el) => {
-                    youtubeIframesRef.current[0] = el;
-                  }}
-                />
-              ) : (
-                <div className="h-full w-full bg-black" />
-              )
-            ) : (
-              <Image src={(slides[0] as Extract<Slide, { type: "image" }>).src} alt={(slides[0] as Extract<Slide, { type: "image" }>).alt} fill priority className="object-cover" />
-            )}
-            {slides[0]?.type !== "video" && slides[0]?.type !== "youtube" && (
-              <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
-            )}
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"
+            style={{
+              backgroundImage: slides[0]?.type === 'image' ? `url(${slides[0].src})` : undefined,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <div className="absolute inset-0 bg-black/30" />
           </div>
         )}
       </div>
-      {/* Prev / Next controls */}
-      <Button
-        type="button"
-        size="icon"
-        aria-label="Previous slide"
-        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/80 text-gray-900 hover:bg-white shadow"
-        onClick={() => swiper?.slidePrev()}
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </Button>
-      {slides[activeIndex]?.type === "youtube" && (
+
+      {/* Navigation Controls */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-4">
         <Button
-          type="button"
-          size="icon"
-          aria-label={isYoutubeMuted ? "Bật âm thanh" : "Tắt âm thanh"}
-          className="absolute left-3 bottom-3 z-10 rounded-full bg-white/80 text-gray-900 hover:bg-white shadow"
-          onClick={toggleYouTubeMute}
+          variant="ghost"
+          size="sm"
+          onClick={togglePlayPause}
+          className="text-white hover:bg-white/20"
         >
-          {isYoutubeMuted ? (
-            <VolumeX className="h-5 w-5" />
-          ) : (
-            <Volume2 className="h-5 w-5" />
-          )}
+          {isPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </Button>
+      </div>
+
+      {/* Navigation Arrows */}
+      {isMounted && swiper && (
+        <>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => swiper.slidePrev()}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 text-white hover:bg-white/20"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => swiper.slideNext()}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 text-white hover:bg-white/20"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </Button>
+        </>
       )}
-      <Button
-        type="button"
-        size="icon"
-        aria-label="Next slide"
-        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/80 text-gray-900 hover:bg-white shadow"
-        onClick={() => swiper?.slideNext()}
-      >
-        <ChevronRight className="h-5 w-5" />
-      </Button>
-      {slides[activeIndex]?.type !== "youtube" && (
-        <div className="mx-auto max-w-5xl px-4 text-center text-white">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-3xl md:text-6xl font-extrabold tracking-tight"
-          >
-            {t("title")}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="mt-4 text-base md:text-xl text-white/90"
-          >
-            {t("subtitle")}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-8"
-          >
-            <Button asChild size="lg" className="shadow hover:shadow-lg">
-              <Link href="/tours">{t("cta")}</Link>
-            </Button>
-          </motion.div>
-        </div>
-      )}
-    </section>
+    </div>
   );
 }
 

@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // GET /api/instagram
 export async function GET() {
   const token = process.env.INSTAGRAM_ACCESS_TOKEN;

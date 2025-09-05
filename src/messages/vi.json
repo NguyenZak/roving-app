@@ -5,16 +5,20 @@
     "about": "Về chúng tôi",
     "contact": "Liên hệ",
     "live": "Sống Trọn Vẹn Ở Việt Nam",
-    "mustSee": "Điểm Đến Không Thể Bỏ Lỡ"
+    "mustSee": "Điểm Đến Không Thể Bỏ Lỡ",
+    "regions": "Vùng Miền"
   },
   "hero": {
     "title": "Khám phá Việt Nam – Sống trọn trong từng hành trình",
     "subtitle": "Trải nghiệm chọn lọc từ Bắc vào Nam.",
-    "cta": "Khám phá ngay"
+    "cta": "Khám phá ngay",
+    "exploreButton": "Khám phá ngay",
+    "contactButton": "Liên hệ"
   },
   "about": {
     "title": "Về Công Ty Du Lịch Của Chúng Tôi",
-    "desc": "Roving Vietnam Travel mang đến những hành trình đậm bản sắc Việt Nam với đội ngũ hướng dẫn viên tận tâm và trải nghiệm chân thực."
+    "descShort": "Roving Vietnam Travel mang đến những hành trình đậm bản sắc Việt Nam với đội ngũ hướng dẫn viên tận tâm và trải nghiệm chân thực.",
+    "desc": "Tại Roving Vietnam Travel, chúng tôi tin rằng mỗi hành trình không chỉ là di chuyển từ nơi này đến nơi khác – đó còn là hành trình khám phá những câu chuyện, đón nhận bản sắc văn hoá và tạo nên ký ức bền lâu.\n\nĐược xây dựng từ niềm đam mê sâu sắc dành cho Việt Nam, chúng tôi mang đến những trải nghiệm du lịch chân thật, vượt xa những điều thông thường. Từ nhịp sống sôi động nơi phố thị đến những cung đường núi ẩn mình, từ bãi biển êm đềm đến các di sản ngàn năm, đội ngũ của chúng tôi luôn nỗ lực để giới thiệu trọn vẹn vẻ đẹp tâm hồn của đất nước này.\n\nVới nhiều năm kinh nghiệm và sự am hiểu địa phương, chúng tôi thiết kế những chuyến đi đo ni đóng giày, kết nối du khách với trái tim của Việt Nam – con người, ẩm thực, thiên nhiên và truyền thống. Dù bạn tìm kiếm phiêu lưu, đắm mình văn hoá hay một kỳ nghỉ thư thái, Roving Vietnam Travel luôn đảm bảo hành trình của bạn trọn vẹn, truyền cảm hứng và khó quên.\n\nSứ mệnh của chúng tôi thật đơn giản: giúp bạn nhìn thấy Việt Nam không chỉ là điểm đến, mà là một câu chuyện mà chính bạn là một phần trong đó."
   },
   "live": {
     "title": "Sống Trọn Vẹn Ở Việt Nam",
@@ -44,13 +48,48 @@
   "contact": {
     "title": "Liên Hệ",
     "fullName": "Họ và tên",
-    "quantity": "Số lượng",
-    "date": "Ngày",
-    "whatsapp": "Whatsapp",
+    "quantity": "Số người tham gia",
+    "date": "Ngày mong muốn",
+    "whatsapp": "WhatsApp",
     "email": "Email",
-    "infoOwner": "Thông tin chủ tour",
+    "message": "Tin nhắn",
     "submit": "Gửi yêu cầu"
-  }
+  },
+  "LiveFully": {
+    "title": "Sống Trọn Vẹn Ở Việt Nam",
+    "subtitle": "Khám phá vẻ đẹp của ba miền từ Bắc vào Nam",
+    "northDesc": "Khám phá vẻ đẹp của miền Bắc với thủ đô Hà Nội, vịnh Hạ Long hùng vĩ và Sapa mờ sương.",
+    "centralDesc": "Trải nghiệm văn hóa miền Trung qua Huế, Đà Nẵng và phố cổ Hội An đầy quyến rũ.",
+    "southDesc": "Tận hưởng sự sôi động của TP.HCM và vẻ đẹp yên bình của đồng bằng sông Cửu Long.",
+    "exploreButton": "Khám phá"
+  },
+  "Regions": {
+    "title": "Khám phá Việt Nam",
+    "subtitle": "Trải nghiệm sự đa dạng văn hóa, ẩm thực và cảnh quan qua ba miền",
+    "northDesc": "Miền Bắc Việt Nam với thủ đô Hà Nội nghìn năm văn hiến, vịnh Hạ Long hùng vĩ, Sapa mờ sương và nhiều di tích lịch sử quan trọng. Nơi đây lưu giữ những giá trị văn hóa truyền thống đặc trưng của dân tộc.",
+    "centralDesc": "Miền Trung Việt Nam là cái nôi của văn hóa Champa với Huế - cố đô xưa, Đà Nẵng hiện đại và phố cổ Hội An quyến rũ. Mỗi thành phố mang trong mình những câu chuyện lịch sử thú vị.",
+    "southDesc": "Miền Nam Việt Nam sôi động với TP.HCM - thành phố không bao giờ ngủ, đồng bằng sông Cửu Long trù phú và những vùng đất giàu tiềm năng du lịch. Đây là sự kết hợp hoàn hảo giữa hiện đại và truyền thống.",
+    "exploreButton": "Khám phá",
+    "regionsTitle": "Ba Miền Việt Nam",
+    "regionsSubtitle": "Mỗi miền có những đặc trưng riêng, tạo nên sự phong phú và hấp dẫn của Việt Nam",
+    "ctaTitle": "Sẵn sàng khám phá Việt Nam?",
+    "ctaSubtitle": "Hãy để chúng tôi giúp bạn lên kế hoạch chuyến đi hoàn hảo",
+    "ctaButton": "Liên hệ ngay",
+    "heroTitle": "Khám phá Việt Nam",
+    "heroSubtitle": "Trải nghiệm sự đa dạng văn hóa, ẩm thực và cảnh quan qua ba miền",
+    "destinationsInRegion": "Điểm đến tại {region}",
+    "viewAll": "Xem tất cả",
+    "destinationsAvailable": "{count} điểm đến có sẵn",
+    "moreDestinations": "+{count} điểm đến khác"
+  },
+  "Destinations": {
+    "featured": "Nổi bật",
+    "exploreButton": "Khám phá",
+    "noDestinations": "Không tìm thấy điểm đến",
+    "noDestinationsDesc": "Chưa có điểm đến nào trong khu vực này."
+  },
+  "featuredDestinationsTitle": "Điểm Đến Nổi Bật",
+  "featuredDestinationsSubtitle": "Khám phá những điểm đến đẹp nhất và nổi tiếng nhất Việt Nam"
 }
 
 

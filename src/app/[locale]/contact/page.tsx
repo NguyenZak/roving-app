@@ -9,7 +9,7 @@ export default async function ContactPage() {
     <>
       <Navbar />
       <main className="py-12">
-        <div className="mx-auto max-w-5xl px-4">
+        <div className="mx-auto max-w-[1440px] px-6">
           <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
           <div className="mt-6">
             <ContactForm />

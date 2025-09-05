@@ -40,7 +40,7 @@ export function slugify(input: string): string {
     .replace(/\s+/g, "-");
 }
 
-export const regions: Record<RegionKey, Province[]> = {
+export const regions: Record<RegionKey, Province[]> = { 
   north: [
     { nameVi: "Hà Giang", nameEn: "Ha Giang", image: "https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop", alt: "Ha Giang" },
     { nameVi: "Cao Bằng", nameEn: "Cao Bang", image: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=1200&auto=format&fit=crop", alt: "Cao Bang" },

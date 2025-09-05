@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Providers from "@/components/providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Add Google Fonts link for Inter
+const googleFontsLink = {
+  rel: 'stylesheet',
+  href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+};
+// Root layout is a Server Component; avoid client-only providers here
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -59,8 +66,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${fsPlaylist.variable} antialiased`}>
-        <Providers>{children}</Providers>
+      <head>
+        <link {...googleFontsLink} />
+      </head>
+      <body className={`${inter.variable} ${geistMono.variable} ${fsPlaylist.variable} antialiased pt-16`}>
+        {children}
       </body>
     </html>
   );

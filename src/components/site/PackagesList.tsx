@@ -32,6 +32,8 @@ export default function PackagesList({
   const [region, setRegion] = useState<"all" | PackageGroup["key"]>("all");
   const [duration, setDuration] = useState<"all" | "3-2" | "4-3" | "5-4" | ">=6">("all");
   const [query, setQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "duration">("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const normalizedGroups: PackageGroup[] = useMemo(
     () =>
@@ -52,13 +54,31 @@ export default function PackagesList({
     };
 
     const q = query.trim().toLowerCase();
-    return normalizedGroups
+    let filtered = normalizedGroups
       .filter((g) => (region === "all" ? true : g.key === region))
       .map((g) => ({
         ...g,
         items: g.items.filter((i) => matchDuration(i.duration) && (q === "" || i.title.toLowerCase().includes(q))),
       }));
-  }, [normalizedGroups, region, duration, query]);
+
+    // Sort items within each group
+    filtered = filtered.map(group => ({
+      ...group,
+      items: [...group.items].sort((a, b) => {
+        if (sortBy === "name") {
+          const aTitle = a.title.toLowerCase();
+          const bTitle = b.title.toLowerCase();
+          return sortOrder === "asc" ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle);
+        } else {
+          const aDays = a.duration.days;
+          const bDays = b.duration.days;
+          return sortOrder === "asc" ? aDays - bDays : bDays - aDays;
+        }
+      })
+    }));
+
+    return filtered;
+  }, [normalizedGroups, region, duration, query, sortBy, sortOrder]);
 
   // Province matches are not shown here; handled by the page using the navbar query.
 
@@ -81,23 +101,33 @@ export default function PackagesList({
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-wrap gap-3 items-center">
-        <div className="flex-1 min-w-[220px]">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={locale === "vi" ? "Tìm gói..." : "Search packages..."}
-            className="w-full border rounded-md px-3 py-2 text-sm bg-background"
-            aria-label={locale === "vi" ? "Tìm kiếm gói" : "Search packages"}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-muted-foreground min-w-20">{locale === "vi" ? "Khu vực" : "Region"}</label>
-          <select
-            className="border rounded-md px-3 py-2 text-sm bg-background"
-            value={region}
-            onChange={(e) => setRegion((e.target.value as "all" | PackageGroup["key"]))}
+      {/* Enhanced Filter Controls */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Search Input */}
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {locale === "vi" ? "Tìm kiếm" : "Search"}
+            </label>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={locale === "vi" ? "Tìm gói du lịch..." : "Search travel packages..."}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              aria-label={locale === "vi" ? "Tìm kiếm gói" : "Search packages"}
+            />
+          </div>
+          
+          {/* Region Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {locale === "vi" ? "Khu vực" : "Region"}
+            </label>
+            <select
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              value={region}
+              onChange={(e) => setRegion((e.target.value as "all" | PackageGroup["key"]))}
           >
             <option value="all">{locale === "vi" ? "Tất cả" : "All"}</option>
             <option value="north">{locale === "vi" ? "Miền Bắc" : "North"}</option>
@@ -105,19 +135,48 @@ export default function PackagesList({
             <option value="south">{locale === "vi" ? "Miền Nam" : "South"}</option>
           </select>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-muted-foreground min-w-20">{locale === "vi" ? "Thời lượng" : "Duration"}</label>
-          <select
-            className="border rounded-md px-3 py-2 text-sm bg-background"
-            value={duration}
-            onChange={(e) => setDuration((e.target.value as "all" | "3-2" | "4-3" | "5-4" | ">=6"))}
-          >
-            <option value="all">{locale === "vi" ? "Tất cả" : "All"}</option>
-            <option value="3-2">3N2Đ</option>
-            <option value="4-3">4N3Đ</option>
-            <option value="5-4">5N4Đ</option>
-            <option value=">=6">{locale === "vi" ? ">= 6N" : ">= 6 days"}</option>
-          </select>
+          {/* Duration Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {locale === "vi" ? "Thời lượng" : "Duration"}
+            </label>
+            <select
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              value={duration}
+              onChange={(e) => setDuration((e.target.value as "all" | "3-2" | "4-3" | "5-4" | ">=6"))}
+            >
+              <option value="all">{locale === "vi" ? "Tất cả" : "All"}</option>
+              <option value="3-2">3N2Đ</option>
+              <option value="4-3">4N3Đ</option>
+              <option value="5-4">5N4Đ</option>
+              <option value=">=6">{locale === "vi" ? ">= 6N" : ">= 6 days"}</option>
+            </select>
+          </div>
+          
+          {/* Sort Controls */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {locale === "vi" ? "Sắp xếp" : "Sort"}
+            </label>
+            <div className="flex gap-2">
+              <select
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as "name" | "duration")}
+              >
+                <option value="name">{locale === "vi" ? "Tên" : "Name"}</option>
+                <option value="duration">{locale === "vi" ? "Thời lượng" : "Duration"}</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                className="px-3 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors duration-200"
+                title={locale === "vi" ? "Đảo ngược thứ tự" : "Reverse order"}
+              >
+                {sortOrder === "asc" ? "↑" : "↓"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -5,16 +5,20 @@
     "about": "About Us",
     "contact": "Contact",
     "live": "Live Fully in Vietnam",
-    "mustSee": "Must See in Vietnam"
+    "mustSee": "Must See in Vietnam",
+    "regions": "Regions"
   },
   "hero": {
     "title": "Discover Vietnam – Live Fully in Every Journey",
     "subtitle": "Curated experiences from North to South.",
-    "cta": "Explore Now"
+    "cta": "Explore Now",
+    "exploreButton": "Explore Now",
+    "contactButton": "Contact Us"
   },
   "about": {
     "title": "About Our Travel Company",
-    "desc": "Roving Vietnam Travel crafts authentic journeys across Vietnam with passionate guides and real local immersion."
+    "descShort": "Roving Vietnam Travel crafts authentic journeys across Vietnam with passionate guides and real local immersion.",
+    "desc": "At Roving Vietnam Travel, we believe that every journey is more than just moving from one place to another – it is about discovering stories, embracing cultures, and creating memories that last a lifetime.\n\nFounded with a deep passion for Vietnam, we craft authentic travel experiences that go beyond the ordinary. From vibrant city streets to hidden mountain trails, from serene beaches to timeless heritage sites, our team is dedicated to revealing the soul of this beautiful country.\n\nWith years of expertise and a local touch, we design tailor-made trips that connect travelers with the heart of Vietnam – its people, flavors, landscapes, and traditions. Whether you are seeking adventure, cultural immersion, or a relaxing escape, Roving Vietnam Travel ensures your journey is seamless, inspiring, and unforgettable.\n\nOur mission is simple: to let you see Vietnam not just as a destination, but as a story you become a part of."
   },
   "live": {
     "title": "Live Fully in Vietnam",
@@ -44,13 +48,48 @@
   "contact": {
     "title": "Contact Us",
     "fullName": "Full Name",
-    "quantity": "Quantity",
-    "date": "Date",
-    "whatsapp": "Whatsapp",
+    "quantity": "Number of People",
+    "date": "Preferred Date",
+    "whatsapp": "WhatsApp",
     "email": "Email",
-    "infoOwner": "Informations Owner",
-    "submit": "Submit"
-  }
+    "message": "Message",
+    "submit": "Send Request"
+  },
+  "LiveFully": {
+    "title": "Live Fully in Vietnam",
+    "subtitle": "Discover the beauty of three regions from North to South",
+    "northDesc": "Discover the beauty of Northern Vietnam with Hanoi capital, majestic Ha Long Bay and misty Sapa.",
+    "centralDesc": "Experience Central Vietnamese culture through Hue, Da Nang and charming Hoi An ancient town.",
+    "southDesc": "Enjoy the vibrancy of Ho Chi Minh City and the peaceful beauty of the Mekong Delta.",
+    "exploreButton": "Explore"
+  },
+  "Regions": {
+    "title": "Explore Vietnam",
+    "subtitle": "Experience the diversity of culture, cuisine and landscapes across three regions",
+    "northDesc": "Northern Vietnam with Hanoi capital of thousand years of civilization, majestic Ha Long Bay, misty Sapa and many important historical sites. This place preserves the distinctive traditional cultural values of the nation.",
+    "centralDesc": "Central Vietnam is the cradle of Champa culture with Hue - the old capital, modern Da Nang and charming Hoi An ancient town. Each city carries interesting historical stories.",
+    "southDesc": "Southern Vietnam is vibrant with Ho Chi Minh City - the city that never sleeps, fertile Mekong Delta and lands rich in tourism potential. This is the perfect combination of modernity and tradition.",
+    "exploreButton": "Explore",
+    "regionsTitle": "Three Regions of Vietnam",
+    "regionsSubtitle": "Each region has its own unique characteristics, creating the richness and appeal of Vietnam",
+    "ctaTitle": "Ready to explore Vietnam?",
+    "ctaSubtitle": "Let us help you plan the perfect trip",
+    "ctaButton": "Contact Now",
+    "heroTitle": "Explore Vietnam",
+    "heroSubtitle": "Experience the diversity of culture, cuisine and landscapes across three regions",
+    "destinationsInRegion": "Destinations in {region}",
+    "viewAll": "View All",
+    "destinationsAvailable": "{count} destinations available",
+    "moreDestinations": "+{count} more"
+  },
+  "Destinations": {
+    "featured": "Featured",
+    "exploreButton": "Explore",
+    "noDestinations": "No destinations found",
+    "noDestinationsDesc": "There are no destinations available in this region yet."
+  },
+  "featuredDestinationsTitle": "Featured Destinations",
+  "featuredDestinationsSubtitle": "Discover the most popular and beautiful destinations across Vietnam"
 }
 
 
