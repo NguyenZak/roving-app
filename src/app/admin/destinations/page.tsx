@@ -28,6 +28,8 @@ const destinationSchema = z.object({
   region: z.enum(["north", "central", "south"]),
   nameVi: z.string().min(1, "Tên tiếng Việt là bắt buộc"),
   nameEn: z.string().min(1, "Tên tiếng Anh là bắt buộc"),
+  descriptionVi: z.string().max(5000).optional().or(z.literal("")),
+  descriptionEn: z.string().max(5000).optional().or(z.literal("")),
   image: z.string().min(1, "Ảnh là bắt buộc"),
   alt: z.string().min(1, "Alt text là bắt buộc"),
   isFeatured: z.boolean(),
@@ -47,6 +49,7 @@ export default function AdminDestinationsPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   const {
     register,
@@ -59,6 +62,8 @@ export default function AdminDestinationsPage() {
     resolver: zodResolver(destinationSchema),
     defaultValues: {
       region: "north",
+      descriptionVi: "",
+      descriptionEn: "",
       isFeatured: false,
       order: 0,
     },
@@ -116,8 +121,15 @@ export default function AdminDestinationsPage() {
       setIsSubmitting(true);
       const fd = new FormData();
       Object.entries(data).forEach(([key, value]) => {
+        if (key === "descriptionVi" || key === "descriptionEn") {
+          const v = (value as unknown as string) ?? "";
+          if (v.trim() === "") return; // skip empty descriptions
+        }
         fd.append(key, String(value));
       });
+      if (galleryImages.length > 0) {
+        fd.append("images", galleryImages.join(","));
+      }
 
       const res = await fetch("/api/admin/destinations", { 
         method: "POST", 
@@ -129,6 +141,7 @@ export default function AdminDestinationsPage() {
         setCreateModalOpen(false);
         reset();
         setPreviewImage("");
+        setGalleryImages([]);
         load(page, pageSize);
         alert("Tạo điểm đến thành công!");
       } else {
@@ -145,6 +158,9 @@ export default function AdminDestinationsPage() {
   const handleImageUpload = (imageUrl: string) => {
     setValue("image", imageUrl);
   };
+  const handleImagesChange = (urls: string[]) => {
+    setGalleryImages(urls);
+  };
 
   const openEditModal = async (id: string) => {
     try {
@@ -155,12 +171,15 @@ export default function AdminDestinationsPage() {
         region: data.region,
         nameVi: data.nameVi,
         nameEn: data.nameEn,
+        descriptionVi: data.descriptionVi || "",
+        descriptionEn: data.descriptionEn || "",
         image: data.image,
         alt: data.alt,
         isFeatured: data.isFeatured,
         order: data.order,
       });
       setPreviewImage(data.image || "");
+      setGalleryImages(Array.isArray(data.images) ? data.images : []);
       setEditingId(id);
       setEditModalOpen(true);
     } catch (e) {
@@ -173,10 +192,21 @@ export default function AdminDestinationsPage() {
     if (!editingId) return;
     try {
       setIsSubmitting(true);
+      const payload: Record<string, unknown> = { ...data };
+      if (typeof payload.descriptionVi === "string" && payload.descriptionVi.trim() === "") {
+        // let server convert empty string -> null by omitting field
+        delete payload.descriptionVi;
+      }
+      if (typeof payload.descriptionEn === "string" && payload.descriptionEn.trim() === "") {
+        delete payload.descriptionEn;
+      }
+      if (galleryImages.length >= 0) {
+        payload.images = galleryImages;
+      }
       const res = await fetch(`/api/admin/destinations/${editingId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!res.ok || !json?.ok) throw new Error(json?.error || "Update failed");
@@ -184,6 +214,7 @@ export default function AdminDestinationsPage() {
       setEditingId(null);
       reset();
       setPreviewImage("");
+      setGalleryImages([]);
       load(page, pageSize);
       alert("Cập nhật điểm đến thành công!");
     } catch (e) {
@@ -198,6 +229,7 @@ export default function AdminDestinationsPage() {
     setCreateModalOpen(true);
     reset();
     setPreviewImage("");
+    setGalleryImages([]);
   };
 
   if (loading) return (
@@ -405,6 +437,17 @@ export default function AdminDestinationsPage() {
                     )}
                   </div>
 
+                  {/* Description VI */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Mô tả điểm đến (VI)</label>
+                    <textarea {...register("descriptionVi")} rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base" />
+                  </div>
+                  {/* Description EN */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Destination Description (EN)</label>
+                    <textarea {...register("descriptionEn")} rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base" />
+                  </div>
+
                   {/* English Name */}
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -423,6 +466,28 @@ export default function AdminDestinationsPage() {
                         {errors.nameEn.message}
                       </p>
                     )}
+                  </div>
+
+                  {/* Description VI */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Mô tả điểm đến (VI)</label>
+                    <textarea
+                      {...register("descriptionVi")}
+                      rows={4}
+                      placeholder="Giới thiệu ngắn về tỉnh/thành..."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
+                    />
+                  </div>
+
+                  {/* Description EN */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Destination Description (EN)</label>
+                    <textarea
+                      {...register("descriptionEn")}
+                      rows={4}
+                      placeholder="Short introduction about the province/city..."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
+                    />
                   </div>
 
                   {/* Region Selection */}
@@ -564,6 +629,24 @@ export default function AdminDestinationsPage() {
                 </div>
               </div>
 
+              {/* Gallery Images */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <h3 className="text-lg font-semibold text-gray-900">Bộ Sưu Tập Ảnh</h3>
+                </div>
+                <div>
+                  <UnifiedImageUpload
+                    label="Tải nhiều ảnh (gallery)"
+                    multiple
+                    images={galleryImages}
+                    onImagesChange={handleImagesChange}
+                    className="w-full"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">Kéo thả để tải lên, sắp xếp lại bằng mũi tên, bấm × để xoá.</p>
+                </div>
+              </div>
+
               {/* Settings Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
@@ -701,6 +784,27 @@ export default function AdminDestinationsPage() {
                     <input {...register("nameEn")} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base" />
                     {errors.nameEn && (<p className="text-sm text-red-600">{errors.nameEn.message}</p>)}
                   </div>
+
+                  {/* Description VI */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Mô tả điểm đến (VI)</label>
+                    <textarea
+                      {...register("descriptionVi")}
+                      rows={4}
+                      placeholder="Giới thiệu ngắn về tỉnh/thành..."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
+                    />
+                  </div>
+                  {/* Description EN */}
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">Destination Description (EN)</label>
+                    <textarea
+                      {...register("descriptionEn")}
+                      rows={4}
+                      placeholder="Short introduction about the province/city..."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
+                    />
+                  </div>
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                       <Globe className="w-4 h-4 text-gray-600" />
@@ -759,6 +863,23 @@ export default function AdminDestinationsPage() {
                       </div>
                     )}
                   </div>
+                </div>
+              </div>
+
+              {/* Gallery Images */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <h3 className="text-lg font-semibold text-gray-900">Bộ Sưu Tập Ảnh</h3>
+                </div>
+                <div>
+                  <UnifiedImageUpload
+                    label="Tải nhiều ảnh (gallery)"
+                    multiple
+                    images={galleryImages}
+                    onImagesChange={handleImagesChange}
+                    className="w-full"
+                  />
                 </div>
               </div>
 

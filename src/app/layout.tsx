@@ -3,22 +3,19 @@ import { Inter, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Add Google Fonts link for Inter
-const googleFontsLink = {
-  rel: 'stylesheet',
-  href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
-};
-// Root layout is a Server Component; avoid client-only providers here
-
+// Configure Google Fonts with proper fallbacks
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["system-ui", "arial"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  fallback: ["ui-monospace", "SFMono-Regular", "monospace"],
 });
 
 const fsPlaylist = localFont({
@@ -66,9 +63,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link {...googleFontsLink} />
-      </head>
       <body className={`${inter.variable} ${geistMono.variable} ${fsPlaylist.variable} antialiased pt-16`}>
         {children}
       </body>

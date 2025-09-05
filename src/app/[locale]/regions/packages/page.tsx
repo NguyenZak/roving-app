@@ -9,22 +9,24 @@ import { getProvincesForRegion, getProvinceDisplayName, slugify } from "@/lib/re
 // Removed framer-motion to keep this server component pure
 import { MapPin, Star, Compass, Package } from "lucide-react";
 
-type Params = { params: { locale: "vi" | "en" }; searchParams?: { q?: string } };
+type Params = { params: Promise<{ locale: "vi" | "en" }>; searchParams?: Promise<{ q?: string }> };
 
 export const metadata: Metadata = {
   title: "Travel Packages by Region - Roving Vietnam Travel",
   description: "Discover amazing travel packages across Northern, Central, and Southern Vietnam. Find your perfect adventure today.",
 };
 
-export default function PackagesPage({ params, searchParams }: Params) {
-  const groups = getPackageGroups(params.locale);
-  const q = (searchParams?.q ?? "").toString();
+export default async function PackagesPage({ params, searchParams }: Params) {
+  const { locale } = await params;
+  const searchParamsResolved = await searchParams;
+  const groups = getPackageGroups(locale);
+  const q = (searchParamsResolved?.q ?? "").toString();
   const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
   const nq = norm(q);
   const provinceMatches = q
     ? (["north", "central", "south"] as const).flatMap((key) =>
         getProvincesForRegion(key).map((p) => {
-          const name = getProvinceDisplayName(params.locale, p);
+          const name = getProvinceDisplayName(locale, p);
           return { region: key, name, slug: slugify(name), image: p.image, alt: p.alt, match: norm(name).includes(nq) };
         })
       ).filter((p) => p.match)
@@ -42,10 +44,10 @@ export default function PackagesPage({ params, searchParams }: Params) {
               Travel Packages
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              {params.locale === 'vi' ? 'Gói Du Lịch Theo Khu Vực' : 'Travel Packages by Region'}
+              {locale === 'vi' ? 'Gói Du Lịch Theo Khu Vực' : 'Travel Packages by Region'}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {params.locale === 'vi' 
+              {locale === 'vi' 
                 ? 'Khám phá những gói du lịch tuyệt vời tại miền Bắc, miền Trung và miền Nam Việt Nam'
                 : 'Discover amazing travel packages across Northern, Central, and Southern Vietnam'
               }
@@ -57,10 +59,10 @@ export default function PackagesPage({ params, searchParams }: Params) {
             <section className="mb-16">
               <div className="text-center mb-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                  {params.locale === 'vi' ? 'Tỉnh/Thành Phù Hợp' : 'Matching Provinces'}
+                  {locale === 'vi' ? 'Tỉnh/Thành Phù Hợp' : 'Matching Provinces'}
                 </h2>
                 <p className="text-gray-600">
-                  {params.locale === 'vi' 
+                  {locale === 'vi' 
                     ? `Tìm thấy ${provinceMatches.length} tỉnh/thành phù hợp với "${q}"`
                     : `Found ${provinceMatches.length} provinces matching "${q}"`
                   }
@@ -114,15 +116,15 @@ export default function PackagesPage({ params, searchParams }: Params) {
           {/* Packages List */}
           <div>
             <PackagesList
-              locale={params.locale}
+              locale={locale}
               groups={groups.map((g) => ({
                 key: g.key,
                 label: g.label,
                 items: g.items.map((p) => ({
-                  title: (params.locale === 'vi' ? p.titleVi : p.titleEn),
+                  title: (locale === 'vi' ? p.titleVi : p.titleEn),
                   image: p.image,
                   duration: p.duration,
-                  slug: encodeURIComponent((params.locale === 'vi' ? p.titleVi : p.titleEn).toLowerCase().replace(/\s+/g, '-')),
+                  slug: encodeURIComponent((locale === 'vi' ? p.titleVi : p.titleEn).toLowerCase().replace(/\s+/g, '-')),
                 })),
               }))}
             />
@@ -132,10 +134,10 @@ export default function PackagesPage({ params, searchParams }: Params) {
           <div className="text-center mt-20">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {params.locale === 'vi' ? 'Sẵn sàng khám phá Việt Nam?' : 'Ready to Explore Vietnam?'}
+                {locale === 'vi' ? 'Sẵn sàng khám phá Việt Nam?' : 'Ready to Explore Vietnam?'}
               </h3>
               <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                {params.locale === 'vi'
+                {locale === 'vi'
                   ? 'Liên hệ với chúng tôi để được tư vấn và đặt gói du lịch phù hợp nhất'
                   : 'Contact us for personalized travel advice and to book your perfect package'
                 }
@@ -145,7 +147,7 @@ export default function PackagesPage({ params, searchParams }: Params) {
                 className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-full font-medium hover:bg-blue-50 transition-colors duration-200"
               >
                 <Compass className="h-5 w-5" />
-                {params.locale === 'vi' ? 'Liên hệ ngay' : 'Contact Us'}
+                {locale === 'vi' ? 'Liên hệ ngay' : 'Contact Us'}
               </Link>
             </div>
           </div>

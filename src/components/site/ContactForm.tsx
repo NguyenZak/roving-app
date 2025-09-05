@@ -211,8 +211,8 @@ export default function ContactForm() {
                             type="number"
                             min={1}
                             {...field}
-                            value={typeof field.value === "number" ? field.value : Number(field.value ?? 1)}
-                            onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
+                            value={Number(field.value) || 1}
+                            onChange={(e) => field.onChange(e.target.value === "" ? 1 : Number(e.target.value))}
                             placeholder={formContent.quantityPlaceholder}
                             className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400"
                           />

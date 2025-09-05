@@ -110,7 +110,7 @@ export default async function RegionPage({ params }: Params) {
             </h1>
             {regionKey === 'packages' ? (
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6">
-                {params.locale === 'vi' 
+                {locale === 'vi' 
                   ? 'Chọn gói du lịch theo 3 khu vực: Miền Bắc, Miền Trung, Miền Nam. Mỗi khu vực có những đặc trưng riêng biệt và hấp dẫn.'
                   : 'Choose travel packages by North, Central, and South regions. Each region has its own unique characteristics and attractions.'
                 }
@@ -133,13 +133,13 @@ export default async function RegionPage({ params }: Params) {
                 ? (locale === "vi" ? item.nameVi : item.nameEn)
                 : getProvinceDisplayName(locale as LocaleOption, item);
               
-              const slug = destinations.length > 0 ? item.slug : slugify(display);
-              const image = destinations.length > 0 ? item.image : item.image;
-              const alt = destinations.length > 0 ? item.alt : item.alt;
+              const slug = destinations.length > 0 ? (item as any).slug : slugify(display);
+              const image = destinations.length > 0 ? (item as any).image : (item as any).image;
+              const alt = destinations.length > 0 ? (item as any).alt : (item as any).alt;
               
               return (
                 <div
-                  key={destinations.length > 0 ? item.id : display}
+                  key={destinations.length > 0 ? (item as any).id : display}
                   className="group"
                 >
                   <Link href={`/regions/${region}/${slug}`} className="block">

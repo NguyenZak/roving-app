@@ -1,6 +1,18 @@
 import nodemailer from 'nodemailer';
 
-// Cấu hình transporter cho Nodemailer
+// Hàm kiểm tra kết nối email
+export async function verifyEmailConnection() {
+  try {
+    await transporter.verify();
+    console.log('✅ Email server connection verified successfully');
+    return true;
+  } catch (error) {
+    console.error('❌ Email server connection failed:', error);
+    return false;
+  }
+}
+
+// Cấu hình transporter cho Nodemailer với xử lý lỗi tốt hơn
 export const transporter = nodemailer.createTransport({
   // Sử dụng SMTP trực tiếp thay vì Gmail service
   host: 'smtp.gmail.com',
@@ -8,11 +20,19 @@ export const transporter = nodemailer.createTransport({
   secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER || 'rovingvietnamtravel@gmail.com',
-    pass: process.env.EMAIL_PASS || 'Roving12345'
+    pass: process.env.EMAIL_PASS || 'dqjq vcvi nugs mfzj'
   },
   tls: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeout: 10000, // 10 seconds
+  greetingTimeout: 5000, // 5 seconds
+  socketTimeout: 10000, // 10 seconds
+  pool: true,
+  maxConnections: 1,
+  maxMessages: 3,
+  rateDelta: 20000, // 20 seconds
+  rateLimit: 5 // max 5 emails per rateDelta
 });
 
 // Template email xác nhận đẹp mắt
@@ -599,20 +619,27 @@ export async function sendConfirmationEmail(contactData: {
   message?: string | null;
 }) {
   try {
+    // Kiểm tra kết nối trước khi gửi
+    const isConnected = await verifyEmailConnection();
+    if (!isConnected) {
+      console.warn('Email server not available, skipping confirmation email');
+      return { success: false, error: 'Email server not available' };
+    }
+
     const emailContent = generateConfirmationEmail(contactData);
     
     const mailOptions = {
-      from: `"Roving Travel" <${process.env.EMAIL_USER}>`,
+      from: `"Roving Travel" <${process.env.EMAIL_USER || 'rovingvietnamtravel@gmail.com'}>`,
       to: contactData.email,
       subject: emailContent.subject,
       html: emailContent.html
     };
 
     const result = await transporter.sendMail(mailOptions);
-    console.log('Confirmation email sent successfully:', result.messageId);
+    console.log('✅ Confirmation email sent successfully:', result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Error sending confirmation email:', error);
+    console.error('❌ Error sending confirmation email:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
@@ -628,20 +655,27 @@ export async function sendAdminNotificationEmail(contactData: {
   contactId: string;
 }) {
   try {
+    // Kiểm tra kết nối trước khi gửi
+    const isConnected = await verifyEmailConnection();
+    if (!isConnected) {
+      console.warn('Email server not available, skipping admin notification email');
+      return { success: false, error: 'Email server not available' };
+    }
+
     const emailContent = generateAdminNotificationEmail(contactData);
     
     const mailOptions = {
-      from: `"Roving Travel Admin" <${process.env.EMAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER,
+      from: `"Roving Travel Admin" <${process.env.EMAIL_USER || 'rovingvietnamtravel@gmail.com'}>`,
+      to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER || 'rovingvietnamtravel@gmail.com',
       subject: emailContent.subject,
       html: emailContent.html
     };
 
     const result = await transporter.sendMail(mailOptions);
-    console.log('Admin notification email sent successfully:', result.messageId);
+    console.log('✅ Admin notification email sent successfully:', result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Error sending admin notification email:', error);
+    console.error('❌ Error sending admin notification email:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }

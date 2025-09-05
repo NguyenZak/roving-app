@@ -55,6 +55,7 @@ const navigation = [
     items: [
       { name: "Regions", href: "/admin/regions", icon: Compass, badge: null },
       { name: "Destinations", href: "/admin/destinations", icon: MapPin, badge: null },
+      { name: "Banners", href: "/admin/banners", icon: Images, badge: null },
       { name: "Tours", href: "/admin/tours", icon: Plane, badge: null },
       { name: "Blog", href: "/admin/blog", icon: FileText, badge: null },
       { name: "Blog Categories", href: "/admin/categories", icon: Folder, badge: null },

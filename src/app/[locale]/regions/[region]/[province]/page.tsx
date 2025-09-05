@@ -258,6 +258,11 @@ export default async function ProvincePage({ params }: Params) {
                     <div className="space-y-2 text-gray-600">
                       <p><strong>{locale === 'vi' ? 'Tên:' : 'Name:'}</strong> {displayName}</p>
                       <p><strong>{locale === 'vi' ? 'Khu vực:' : 'Region:'}</strong> {locale === 'vi' ? destination.Region?.nameVi : destination.Region?.nameEn}</p>
+                      {(locale === 'vi' ? (destination as any).descriptionVi : (destination as any).descriptionEn) && (
+                        <p className="text-gray-700">
+                          {(locale === 'vi' ? (destination as any).descriptionVi : (destination as any).descriptionEn) as string}
+                        </p>
+                      )}
                       {destination.isFeatured && (
                         <p className="text-blue-600 font-semibold">⭐ {locale === 'vi' ? 'Điểm đến nổi bật' : 'Featured Destination'}</p>
                       )}

@@ -33,7 +33,17 @@ export async function POST(req: Request) {
   const regionId = String(form.get("regionId") ?? "").trim();
   const nameVi = String(form.get("nameVi") ?? "").trim();
   const nameEn = String(form.get("nameEn") ?? "").trim();
+  const descriptionVi = String(form.get("descriptionVi") ?? "").trim();
+  const descriptionEn = String(form.get("descriptionEn") ?? "").trim();
   const image = String(form.get("image") ?? "").trim();
+  const imagesRaw = String(form.get("images") ?? "").trim();
+  const images = imagesRaw
+    ? imagesRaw
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+    : [];
+  console.log('[DESTINATIONS POST] images parsed:', images);
   const alt = String(form.get("alt") ?? "").trim();
   const isFeatured = form.get("isFeatured") ? true : false;
   const order = Number(form.get("order") ?? 0) || 0;
@@ -53,8 +63,9 @@ export async function POST(req: Request) {
       );
     }
     const created = await prisma.destination.create({
-      data: { region, regionId: regionId || null, nameVi, nameEn, image, alt, slug, isFeatured, order },
+      data: { region, regionId: regionId || null, nameVi, nameEn, descriptionVi: descriptionVi || null, descriptionEn: descriptionEn || null, image, images, alt, slug, isFeatured, order },
     });
+    console.log('[DESTINATIONS POST] created id:', created.id, 'images count:', created.images.length);
     return NextResponse.json({ ok: true, id: created.id });
   } catch (e) {
     const err = e as { code?: string; meta?: { target?: string[] } } | Error;

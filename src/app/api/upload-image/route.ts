@@ -84,8 +84,8 @@ export async function POST(req: Request) {
       upload.end(buffer);
     });
 
-    // TinyMCE expects { location: "https://..." }
-    return NextResponse.json({ location: result.secure_url });
+    // Return both location and public_id for client-side management
+    return NextResponse.json({ location: result.secure_url, public_id: result.public_id });
   } catch (error) {
     console.error("Cloudinary upload error:", error);
     console.error("Error details:", {

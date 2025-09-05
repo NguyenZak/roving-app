@@ -28,6 +28,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const regionId = form.get("regionId") as string | null;
     const nameVi = form.get("nameVi") as string | null;
     const nameEn = form.get("nameEn") as string | null;
+    const descriptionViRaw = form.get("descriptionVi") as string | null;
+    const descriptionEnRaw = form.get("descriptionEn") as string | null;
     const image = form.get("image") as string | null;
     const alt = form.get("alt") as string | null;
     const isFeatured = form.get("isFeatured") ? true : false;
@@ -39,6 +41,16 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         ...(region ? { region } : {}),
         ...(nameVi ? { nameVi } : {}),
         ...(nameEn ? { nameEn, slug: nameEn.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") } : {}),
+        ...(
+          descriptionViRaw !== null
+            ? { descriptionVi: descriptionViRaw.trim() === "" ? null : descriptionViRaw }
+            : {}
+        ),
+        ...(
+          descriptionEnRaw !== null
+            ? { descriptionEn: descriptionEnRaw.trim() === "" ? null : descriptionEnRaw }
+            : {}
+        ),
         ...(image ? { image } : {}),
         ...(alt ? { alt } : {}),
         isFeatured,
@@ -72,27 +84,61 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     const regionId = (data.regionId as string) ?? undefined;
     const nameVi = (data.nameVi as string) ?? undefined;
     const nameEn = (data.nameEn as string) ?? undefined;
+    const descriptionVi = (data.descriptionVi as string | undefined);
+    const descriptionEn = (data.descriptionEn as string | undefined);
     const image = (data.image as string) ?? undefined;
+    const images = Array.isArray((data as any).images)
+      ? ((data as any).images as string[])
+      : typeof (data as any).images === 'string'
+        ? String((data as any).images).split(',').map(s => s.trim()).filter(Boolean)
+        : undefined;
     const alt = (data.alt as string) ?? undefined;
     const isFeatured = data.isFeatured !== undefined ? Boolean(data.isFeatured === "on" || data.isFeatured === true || data.isFeatured === "true") : undefined;
     const order = data.order !== undefined ? Number(data.order) : undefined;
 
-    const updated = await prisma.destination.update({
-      where: { id },
-      data: {
-        ...(region ? { region } : {}),
-        ...(nameVi ? { nameVi } : {}),
-        ...(nameEn ? { nameEn, slug: nameEn.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") } : {}),
-        ...(image ? { image } : {}),
-        ...(alt ? { alt } : {}),
-        ...(isFeatured !== undefined ? { isFeatured } : {}),
-        ...(order !== undefined && !Number.isNaN(order) ? { order } : {}),
-        ...(regionId !== undefined ? { regionId: regionId || null } : {}),
-      },
-    });
-    return NextResponse.json({ ok: true, id: updated.id });
+    console.log('[DESTINATIONS PATCH]', id, 'images incoming:', images);
+    const dataForUpdateBase = {
+      ...(region ? { region } : {}),
+      ...(nameVi ? { nameVi } : {}),
+      ...(nameEn ? { nameEn, slug: nameEn.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") } : {}),
+      ...(image ? { image } : {}),
+      ...(images ? { images } : {}),
+      ...(alt ? { alt } : {}),
+      ...(isFeatured !== undefined ? { isFeatured } : {}),
+      ...(order !== undefined && !Number.isNaN(order) ? { order } : {}),
+      ...(regionId !== undefined ? { regionId: regionId || null } : {}),
+    } as Record<string, unknown>;
+
+    const dataWithDescriptions = {
+      ...dataForUpdateBase,
+      ...(descriptionVi !== undefined ? { descriptionVi: descriptionVi.trim() === "" ? null : descriptionVi } : {}),
+      ...(descriptionEn !== undefined ? { descriptionEn: descriptionEn.trim() === "" ? null : descriptionEn } : {}),
+    } as Record<string, unknown>;
+
+    let updatedId: string | null = null;
+    try {
+      const updated = await prisma.destination.update({ where: { id }, data: dataWithDescriptions });
+      console.log('[DESTINATIONS PATCH] updated id:', updated.id, 'images count:', Array.isArray((updated as any).images) ? (updated as any).images.length : 'n/a');
+      updatedId = updated.id;
+    } catch (err) {
+      const msg = String(err);
+      const unknownArg = msg.includes('Unknown arg `descriptionVi`') || msg.includes('Unknown arg `descriptionEn`');
+      if (unknownArg) {
+        const updated = await prisma.destination.update({ where: { id }, data: dataForUpdateBase });
+        updatedId = updated.id;
+      } else {
+        throw err;
+      }
+    }
+
+    return NextResponse.json({ ok: true, id: updatedId });
   } catch (e) {
-    return NextResponse.json({ ok: false, error: String(e) }, { status: 400 });
+    const msg = String(e);
+    const isUniqueSlug = msg.includes("Unique constraint failed") && msg.includes("slug");
+    if (isUniqueSlug) {
+      return NextResponse.json({ ok: false, error: "Slug đã tồn tại. Hãy đổi tên tiếng Anh khác để tạo slug mới." }, { status: 409 });
+    }
+    return NextResponse.json({ ok: false, error: msg }, { status: 400 });
   }
 }
 

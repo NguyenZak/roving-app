@@ -143,7 +143,10 @@ model Destination {
   regionId   String?
   nameVi     String
   nameEn     String
+  descriptionVi String?
+  descriptionEn String?
   image      String
+  images     String[] @default([])
   alt        String
   slug       String   @unique
   isFeatured Boolean  @default(false)

@@ -7,32 +7,19 @@ import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
+import type { Prisma } from "@prisma/client";
 
-interface Tour {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  shortDescription?: string | null;
-  price: number;
-  location: string;
-  image: string;
-  duration?: string | null;
-  maxGroupSize?: number | null;
-  difficulty?: string | null;
-  category?: string | null;
-  featured: boolean;
-  highlights?: string[];
-  tags?: string[];
-  Destination?: {
-    nameEn: string;
-    Region?: {
-      nameEn: string;
+type TourWithDestination = Prisma.TourGetPayload<{
+  include: {
+    Destination: {
+      include: {
+        Region: true;
+      };
     };
-  } | null;
-}
+  };
+}>;
 
-async function getTours(): Promise<Tour[]> {
+async function getTours(): Promise<TourWithDestination[]> {
   try {
     const tours = await prisma.tour.findMany({
       where: {
