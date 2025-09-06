@@ -128,10 +128,10 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
             <MapPin className="h-8 w-8 text-violet-600 group-hover:scale-110 transition-transform duration-200" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-lg text-gray-900">
+            <span className="font-inter-bold text-lg text-gray-900">
               Roving Vietnam
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="font-inter-normal text-xs text-gray-500">
               Travel & Tours
             </span>
           </div>
@@ -144,7 +144,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-semibold text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
+                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
                   {t("live")}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="p-8 w-screen md:w-[1100px] md:left-1/2 md:-translate-x-1/2 bg-white/98 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-2xl">
@@ -155,7 +155,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                           <img src={region.image} alt={region.nameVi} className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                           <div className="absolute inset-0 flex items-end p-6">
-                            <span className="text-white font-bold text-xl drop-shadow-2xl">
+                            <span className="text-white font-inter-bold text-xl drop-shadow-2xl">
                               {region.nameVi}
                             </span>
                           </div>
@@ -167,7 +167,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-semibold text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
+                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
                   {t("mustSee")}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="p-8 w-screen md:w-[1000px] md:left-1/2 md:-translate-x-1/2 border border-gray-200 rounded-2xl shadow-xl">
@@ -187,7 +187,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                               <img src={regions.find(r => r.key === regionKey)?.image || "/placeholder-region.jpg"} alt="region" className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110" />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                               <div className="absolute inset-0 flex items-end p-4">
-                                <span className="text-white font-bold text-lg drop-shadow-lg">
+                                <span className="text-white font-inter-bold text-lg drop-shadow-lg">
                                   {regionKey === 'north' ? 'Miền Bắc' : regionKey === 'central' ? 'Miền Trung' : 'Miền Nam'}
                                 </span>
                               </div>
@@ -201,7 +201,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                                   className="flex items-center gap-3 text-gray-800 hover:text-violet-600 transition-all duration-300 group p-3 rounded-lg hover:bg-violet-50/50"
                                 >
                                   <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-violet-600 transition-all duration-300 group-hover:translate-x-1" />
-                                  <span className="text-sm font-medium">
+                                  <span className="text-sm font-inter-medium">
                                     {locale === "vi" ? destination.nameVi : destination.nameEn}
                                   </span>
                                 </Link>
@@ -217,7 +217,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
 
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/about" className={`px-4 py-2 font-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
+                  <Link href="/about" className={`px-4 py-2 font-inter-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
                     {t("about")}
                   </Link>
                 </NavigationMenuLink>
@@ -225,14 +225,14 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
 
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/tours" className={`px-4 py-2 font-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
+                  <Link href="/tours" className={`px-4 py-2 font-inter-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
                     Tours
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/contact" className={`px-4 py-2 font-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
+                  <Link href="/contact" className={`px-4 py-2 font-inter-medium transition-colors duration-200 ${textColor} ${hoverColor}`}>
                     {t("contact")}
                   </Link>
                 </NavigationMenuLink>
@@ -297,7 +297,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
             </SheetTrigger>
             <SheetContent side="right" className="p-0 w-80 bg-white/95 backdrop-blur-md">
               <SheetHeader className="p-6 border-b border-gray-200">
-                <SheetTitle className="text-xl font-bold text-gray-900">Roving Vietnam Travel</SheetTitle>
+                <SheetTitle className="text-xl font-inter-bold text-gray-900">Roving Vietnam Travel</SheetTitle>
               </SheetHeader>
               
               <div className="p-6">
@@ -325,7 +325,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                   <Link
                     href="/regions/packages"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-inter-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
                   >
                     <Compass className="h-5 w-5" />
                     <span>{t("live")}</span>
@@ -333,7 +333,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                   <Link
                     href="/regions/north"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-inter-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
                   >
                     <Landmark className="h-5 w-5" />
                     <span>{t("mustSee")}</span>
@@ -342,7 +342,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                   <Link
                     href="/tours"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-inter-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
                   >
                     <Plane className="h-5 w-5" />
                     <span>Tours</span>
@@ -350,7 +350,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                   <Link
                     href="/about"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-inter-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
                   >
                     <Home className="h-5 w-5" />
                     <span>{t("about")}</span>
@@ -358,7 +358,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                   <Link
                     href="/contact"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-inter-medium text-gray-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-200"
                   >
                     <Phone className="h-5 w-5" />
                     <span>{t("contact")}</span>
