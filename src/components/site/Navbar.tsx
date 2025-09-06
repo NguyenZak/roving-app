@@ -144,7 +144,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
+                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
                   {t("live")}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="p-8 w-screen md:w-[1100px] md:left-1/2 md:-translate-x-1/2 bg-white/98 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-2xl">
@@ -167,7 +167,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium text-base ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
+                <NavigationMenuTrigger className={`bg-transparent hover:bg-transparent px-6 py-3 font-inter-medium ${textColor} ${hoverColor} transition-all duration-300 rounded-lg hover:bg-violet-50/50`}>
                   {t("mustSee")}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="p-8 w-screen md:w-[1000px] md:left-1/2 md:-translate-x-1/2 border border-gray-200 rounded-2xl shadow-xl">
